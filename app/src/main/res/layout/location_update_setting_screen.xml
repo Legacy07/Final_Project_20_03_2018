@@ -1,0 +1,114 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/groupBoxinsideLayout"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/banner_group_box"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/layoutTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:text="Location updates"
+            android:textColor="#FFFFFF"
+            android:textSize="25dp" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/locationupdateSettingInformationButton"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/layoutTitle"
+            android:background="@drawable/ic_information_mark"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/secondBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/groupBoxinsideLayout"
+        android:background="@drawable/bottom_box">
+
+        <TextView
+            android:id="@+id/header3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="Send Location Updates"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/firstTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header3"
+            android:gravity="left"
+            android:text="Every (in seconds)"
+            android:textSize="18dp" />
+
+        <Spinner
+            android:id="@+id/locationUpdateSettingUpdateSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/header3" />
+
+        <TextView
+            android:id="@+id/header4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/firstTextView"
+            android:layout_marginTop="10dp"
+            android:gravity="left"
+            android:text="Refresh Location"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/secondTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header4"
+            android:gravity="left"
+            android:text="Every (in minutes)"
+            android:textSize="18dp" />
+
+        <Spinner
+            android:id="@+id/locationUpdateSettingRefreshSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/header4" />
+
+        <TextView
+            android:id="@+id/header5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/secondTextView"
+            android:layout_marginTop="10dp"
+            android:gravity="left"
+            android:text="Location History"
+            android:textSize="20dp" />
+
+        <Spinner
+            android:id="@+id/locationUpdateSettingHistorySpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/header5" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

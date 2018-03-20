@@ -1,0 +1,173 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ahmet.final_project.Setup_1">
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:text="Personal Information"
+        android:textSize="20dp"
+        android:textStyle="bold"
+
+        />
+
+    <RelativeLayout
+        android:id="@+id/setup1box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/header"
+        android:layout_below="@id/header"
+        android:background="@drawable/setup1box"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/setup1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Setup - 1 of 3"
+            android:textColor="@color/colorWhite"
+            android:textSize="16dp"
+            android:textStyle="bold">
+
+        </TextView>
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/firstBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/setup1box"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bottom_box">
+
+        <TextView
+            android:id="@+id/nameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="Name"
+            android:textSize="18dp" />
+
+        <EditText
+            android:id="@+id/nameEdittext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/nameText"
+            android:background="@drawable/rounded_edittext"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:padding="3dp" />
+
+        <!--<TextView-->
+            <!--android:id="@+id/numberText"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/nameText"-->
+            <!--android:layout_marginTop="15dp"-->
+            <!--android:gravity="left"-->
+            <!--android:text="Mobile Number"-->
+            <!--android:textSize="18dp" />-->
+
+        <!--<EditText-->
+            <!--android:id="@+id/numberEdittext"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignRight="@+id/nameText"-->
+            <!--android:layout_below="@id/nameEdittext"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:background="@drawable/rounded_edittext"-->
+            <!--android:ems="10"-->
+            <!--android:inputType="textPersonName"-->
+            <!--android:padding="3dp" />-->
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/header2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/firstBox"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:text="Set your message"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:id="@+id/secondBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/header2"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bottom_box">
+
+        <TextView
+            android:id="@+id/setText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="Set your message"
+            android:textSize="18dp" />
+
+        <EditText
+            android:id="@+id/setMessageEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/rounded_edittext"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:maxLength="160"
+            android:padding="3dp"
+            android:text="" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/groupBoxbannerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bottom_box"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/setup1NextButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorGray"
+            android:drawableRight="@drawable/ic_tick"
+            android:gravity="right"
+            android:text="Next"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="18dp" />
+
+        <Button
+            android:id="@+id/setup1BackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/colorGray"
+            android:drawableLeft="@drawable/ic_back"
+            android:gravity="left"
+            android:text="Back"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="18dp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

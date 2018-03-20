@@ -1,0 +1,114 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/groupBoxinsideLayout"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/banner_group_box"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/layoutTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:text="Update Contacts"
+            android:textColor="#FFFFFF"
+            android:textSize="25dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/secondBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/groupBoxinsideLayout"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bottom_box">
+
+        <Button
+            android:id="@+id/contactSettingaddContact1Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorGray"
+            android:drawableLeft="@drawable/ic_add_contact"
+            android:text="Add Contact"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/contactSetting1Textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/contactSettingaddContact1Button"
+            android:gravity="center_horizontal"
+            android:paddingLeft="2dp"
+            android:text=""
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/contactSettingaddContact2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/contactSettingaddContact1Button"
+            android:layout_marginTop="5dp"
+            android:background="@color/colorGray"
+            android:text="Contact 2"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/contactSetting2Textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contactSettingaddContact1Button"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/contactSettingaddContact2"
+            android:gravity="center_horizontal"
+            android:paddingLeft="2dp"
+            android:text=""
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/contactSettingaddContact3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/contactSettingaddContact2"
+            android:layout_marginTop="5dp"
+            android:background="@color/colorGray"
+            android:text="Contact 3"
+
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/contactSetting3Textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contactSettingaddContact2"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/contactSettingaddContact3"
+            android:gravity="center_horizontal"
+            android:paddingLeft="2dp"
+            android:text=""
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

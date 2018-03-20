@@ -1,0 +1,60 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/groupBoxinsideLayout"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/banner_group_box"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/layoutTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:text="Activation"
+            android:textColor="#FFFFFF"
+            android:textSize="25dp" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/activationSettingInformationButton"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/layoutTitle"
+            android:background="@drawable/ic_information_mark"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/secondBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/groupBoxinsideLayout"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bottom_box">
+
+        <TextView
+            android:id="@+id/powerButtontext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="Power button press"
+            android:textSize="18dp" />
+
+        <Spinner
+            android:id="@+id/activation_setting_power_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

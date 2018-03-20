@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ahmet.final_project.Main"
+    >
+
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:background="@color/colorPrimary"
+        android:drawableRight="@drawable/ic_arrow_right"
+        android:gravity="center"
+        android:paddingLeft="5dp"
+        android:text="Let's get started"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textSize="20dp" />
+
+    <Button
+        android:id="@+id/showButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorPrimary"
+        android:drawableRight="@drawable/ic_arrow_right"
+        android:gravity="center"
+        android:paddingLeft="5dp"
+        android:text="Show"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/first_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/startButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:text="Welcome to the application.
+This application allows you to;"
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/bullet_point_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/first_line"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:text="@string/bullet_point_1"
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/bullet_point_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bullet_point_1"
+        android:gravity="center_horizontal"
+        android:text="@string/bullet_point_2"
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/last_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bullet_point_2"
+        android:layout_marginLeft="75dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="10dp"
+        android:text="Now, you will through few screens in order to complete the setup so you don't have to manually do it afterwards. "
+        android:textSize="18dp" />
+</RelativeLayout>

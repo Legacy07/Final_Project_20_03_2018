@@ -1,0 +1,130 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ahmet.final_project.Setup_3">
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:text="How to activate the app?"
+        android:textSize="20dp"
+        android:textStyle="bold"
+
+        />
+
+    <RelativeLayout
+        android:id="@+id/setup1box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/header"
+        android:layout_below="@id/header"
+        android:background="@drawable/setup3box"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/setup1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Setup - 3 of 3"
+            android:textColor="@color/colorWhite"
+            android:textSize="16dp"
+            android:textStyle="bold">
+
+        </TextView>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/firstBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/setup1box"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bottom_box">
+
+        <TextView
+            android:id="@+id/descriptionText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="@string/setup3_description"
+            android:textSize="18dp" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/arrowDownImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/firstBox"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/ic_arrow_down" />
+
+    <RelativeLayout
+        android:id="@+id/secondBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/arrowDownImage"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/bottom_box">
+
+        <TextView
+            android:id="@+id/powerButtontext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="Power button press"
+            android:textSize="18dp" />
+
+        <Spinner
+            android:id="@+id/power_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/groupBoxbannerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bottom_box"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/finishButtonSetup3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorGray"
+            android:drawableRight="@drawable/ic_tick"
+            android:gravity="right"
+            android:text="Finish"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="18dp" />
+        <Button
+            android:id="@+id/setup3BackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/colorGray"
+            android:drawableLeft="@drawable/ic_back"
+            android:gravity="left"
+            android:text="Back"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="18dp" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

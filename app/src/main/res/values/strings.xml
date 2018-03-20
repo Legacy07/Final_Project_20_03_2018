@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Final Year Project</string>
+    <string name="bullet_point_1"><b> \u2022 Send Emergency messages automatically to your family/friends and the emergency centre by multiple presses on power button </b></string>
+    <string name="bullet_point_2"><b> \u2022 Able to send messages automatically even if there is no signal on your device </b></string>
+
+    <string name="permissions_string_1">Please grant permissions for such reasons;</string>
+    <string name="permissions_string_2"><b> *Messages - We need to access to your default SMS application in order to send messages. </b></string>
+    <string name="permissions_string_3"><b> *Contacts - We need to access to your contacts list so you can select your contacts.</b></string>
+    <string name="permissions_string_4"><b> *Location - We need to access to your GPS and enable if its disabled whenever you trigger the application send the emergency messages </b></string>
+
+    <string name="setup3_description">You can activate the application by pressing the power button 3 times whether the phone is locked or not then it will send the emergency message automatically. </string>
+
+    <string name="location_update_Information">Here you are allowed to change the options on location preferences. You can decide the interval on sending location update messages after Emergency message is been sent to allow the receiver track your location. Also, refresh Location on the home screen and save location history for cases of no network signal. </string>
+
+    <string name="setup1_message_text">I\'m in danger, message back as soon as possible.</string>
+
+    <string-array name="location_update">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+    </string-array>
+    <string-array name="refresh_location">
+        <item>1</item>
+        <item>5</item>
+        <item>10</item>
+    </string-array>
+    <string-array name="location_history">
+        <item>1</item>
+        <item>3</item>
+        <item>5</item>
+    </string-array>
+    <string-array name="power_button_press">
+        <item>3</item>
+        <item>5</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_maps">Map</string>
+
+</resources>

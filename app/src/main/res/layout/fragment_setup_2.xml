@@ -1,0 +1,259 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ahmet.final_project.Setup_2">
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:text="Select Contacts"
+        android:textSize="20dp"
+        android:textStyle="bold"
+
+        />
+
+    <RelativeLayout
+        android:id="@+id/setup1box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/header"
+        android:layout_below="@id/header"
+        android:background="@drawable/setup2box"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/setup1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Setup - 2 of 3"
+            android:textColor="@color/colorWhite"
+            android:textSize="16dp"
+            android:textStyle="bold">
+
+        </TextView>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/firstBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/setup1box"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bottom_box">
+
+        <Button
+        android:id="@+id/addContactButton1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorGray"
+        android:drawableLeft="@drawable/ic_add_contact"
+        android:text="Add Contact"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/contactTextview1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/addContactButton1"
+            android:textSize="18dp"
+            android:paddingLeft="2dp"
+            android:text=""
+            android:textStyle="bold"
+            android:gravity="center_horizontal"/>
+
+        <TextView
+            android:id="@+id/contact2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/addContactButton1"
+            android:background="@color/colorGray"
+            android:text="Contact 2:"
+            android:textAllCaps="false"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/colorWhite"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/contactTextview2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/addContactButton1"
+            android:layout_toRightOf="@id/contact2"
+            android:textSize="18dp"
+            android:paddingLeft="2dp"
+            android:text=""
+            android:textStyle="bold"
+            android:gravity="center_horizontal"/>
+
+        <TextView
+            android:id="@+id/contact3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contact2"
+            android:background="@color/colorGray"
+            android:text="Contact 3:"
+            android:textAllCaps="false"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/colorWhite"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/contactTextview3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/contact2"
+            android:layout_toRightOf="@id/contact3"
+            android:textSize="18dp"
+            android:paddingLeft="2dp"
+            android:text=""
+            android:textStyle="bold"
+            android:gravity="center_horizontal"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/header2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/firstBox"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:text="Location Updates"
+        android:textSize="20dp"
+        android:textStyle="bold"
+
+        />
+
+    <RelativeLayout
+        android:id="@+id/secondBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/header2"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bottom_box">
+
+        <TextView
+            android:id="@+id/header3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="Send Location Updates"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/firstTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header3"
+            android:gravity="left"
+            android:text="Every (in seconds)"
+            android:textSize="18dp" />
+
+        <Spinner
+            android:id="@+id/updateSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true" />
+            <!--android:layout_below="@+id/header3"-->
+
+        <TextView
+            android:id="@+id/header4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/firstTextView"
+            android:layout_marginTop="10dp"
+            android:gravity="left"
+            android:text="Refresh Location"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/secondTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header4"
+            android:gravity="left"
+            android:text="Every (in minutes)"
+            android:textSize="18dp" />
+
+        <Spinner
+            android:id="@+id/refreshSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/firstTextView"
+            android:layout_marginTop="10dp"
+
+            />
+
+        <TextView
+            android:id="@+id/header5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/secondTextView"
+            android:layout_marginTop="10dp"
+            android:gravity="left"
+            android:text="Location History"
+            android:textSize="20dp" />
+
+        <Spinner
+            android:id="@+id/historySpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/secondTextView"
+            android:layout_marginTop="10dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/groupBoxbannerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bottom_box"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/setup2NextButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorGray"
+            android:drawableRight="@drawable/ic_tick"
+            android:gravity="right"
+            android:text="Next"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="18dp" />
+
+        <Button
+            android:id="@+id/setup2BackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/colorGray"
+            android:drawableLeft="@drawable/ic_back"
+            android:gravity="left"
+            android:text="Back"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="18dp" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
