@@ -112,9 +112,14 @@ public class Setup_2 extends Fragment {
 //        String update = main.getLoc_update().toString();
 //        String refresh = main.getLoc_refresh().toString();
 //        String history = main.getLoc_history().toString();
-        String contact = main.getContact1().toString();
+        String contact1 = main.getContact1().toString();
+        String contact2 = main.getContact2().toString();
+        String contact3 = main.getContact3().toString();
+
         //set the number
-        contactText1.setText(contact);
+        contactText1.setText(contact1);
+        contactText2.setText(contact2);
+        contactText3.setText(contact3);
 
 
         AddContact1();
@@ -255,7 +260,7 @@ public class Setup_2 extends Fragment {
 
                 //only add the number and trim the rest which shows the id.
                 String contact2 = contacts.get(1).toString();
-                String sContact2 = contact.substring(contact2.indexOf(";") + 1);
+                String sContact2 = contact2.substring(contact2.indexOf(";") + 1);
                 sContact2.trim();
                 //add it to contact text view
                 contactText2.setText(sContact2);

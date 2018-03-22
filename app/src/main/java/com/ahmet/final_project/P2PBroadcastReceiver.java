@@ -4,6 +4,7 @@ package com.ahmet.final_project;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
@@ -60,13 +61,22 @@ public class P2PBroadcastReceiver extends BroadcastReceiver {
             if (manager != null) {
                 manager.requestPeers(channel, home);
             }
-            Log.d(Home.TAG, "Nearby peers have changed");
+//            Log.d(Home.TAG, "Nearby peers have changed");
 
 
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
 
-            // Connection state changed! We should probably do something about
-            // that.
+            if (manager == null) {
+                return;
+            }
+
+            NetworkInfo networkInfo = (NetworkInfo) intent
+                    .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+
+            if (networkInfo.isConnected()) {
+
+                manager.requestConnectionInfo(channel, home);
+            }
 
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
 //            DeviceListFragment fragment = (DeviceListFragment) activity.getFragmentManager()

@@ -28,9 +28,11 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
+import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
@@ -81,7 +83,7 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP2pManager.PeerListListener {
+public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener {
 
     Button sosButton;
     Button showButton;
@@ -137,6 +139,7 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
 
     Channel channel;
     WifiP2pManager wifiP2pManager;
+    public WifiP2pDevice wifiP2pDevice;
 
     ProgressDialog progressDialog = null;
 
@@ -147,6 +150,8 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
 
     // intent filters for wifi p2p broadcast receiver
     IntentFilter intentFilter2 = new IntentFilter();
+
+    String contact1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,6 +178,8 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
         contact3TextV = (TextView) findViewById(R.id.contactSetting3Textview);
 
         db = new DbHandler(this);
+        contact1 = db.getContact1().toString();
+
         //open location update setting dialog
         LocationUpdateSetting();
         //opens contact setting dialog
@@ -192,7 +199,7 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
         //Broadcast receiver to register the screen state
         broadcastReceiver = new PowerButtonActivation();
         registerReceiver(broadcastReceiver, intentFilter);
-        whatsappMessage = "I'm " + "ahmet" + " and " + "Im in danger" + " My location is: "
+        whatsappMessage = "I'm " + "ahmet" + " and " + "I'm in danger" + " My location is: "
                 //if comma doesnt work then use encoding for the link
                 + "http://maps.google.com/?q=" + latitude + "," + longitude + "";
         Show();
@@ -210,9 +217,11 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
 
                 //initialise pending intents for broadcast receiver to listen for whenever the message is sent and delivered
                 PendingIntent sentPendingIntent = PendingIntent.getBroadcast(Home.this, 0, new Intent(
-                        SENT), 0);
+                        SENT), PendingIntent.FLAG_UPDATE_CURRENT
+                );
                 PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(Home.this, 0,
-                        new Intent(DELIVERED), 0);
+                        new Intent(DELIVERED), PendingIntent.FLAG_UPDATE_CURRENT
+                );
                 //register receivers so it can start receiving and create an intent
                 registerReceiver(sentMessageBroadcastReceiver, new IntentFilter(SENT));
                 registerReceiver(deliveredMessageBroadcastReceiver, new IntentFilter(DELIVERED));
@@ -224,6 +233,7 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
                 //build notification after every update
                 //Notification(Home.this, 2, R.drawable.ic_tick, Color.RED, updateMessageTitle, sendMessageBody + contact);
                 db.onClose();
+
             }
         });
 
@@ -266,6 +276,42 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
 //                        }
                     }
                 }, 5000);
+
+                Handler handler2 = new Handler();
+
+                handler2.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //send whatsapp message after 5 seconds
+                        try {
+                            //FOR OTHER SOCIAL MEDIA - https://stackoverflow.com/questions/35972329/how-to-open-specific-contact-chat-screen-in-various-popular-chat-social-networks
+
+                            //http://howdygeeks.com/send-whatsapp-message-unsaved-number-android/
+
+                            //whatsapp tos --
+                            //Be aware that the following actions are in violation of our Terms of Service:
+                            //Using an automated system or an unauthorized / unofficial client application to send messages through WhatsApp.
+
+                            //so it can only open the chat
+                            //the user needs to press send thats all, not %100 automated
+                            PackageManager packageManager = getPackageManager();
+                            Intent intent1 = new Intent(Intent.ACTION_VIEW);
+                            //the url allows to send message to the phone number
+                            String message = "https://api.whatsapp.com/send?phone=" + contact1 + "&text=" + URLEncoder.encode(whatsappMessage, "UTF-8");
+                            //get to whatsapp and send the data when its open
+                            intent1.setPackage("com.whatsapp");
+                            intent1.setData(Uri.parse(message));
+                            //if there is whatsapp, open it
+                            if (intent1.resolveActivity(packageManager) != null) {
+                                startActivity(intent1);
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, 10000);
+
             }
         });
 
@@ -354,6 +400,35 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
                         }
                     });
 
+//                    //remove the progress dialog
+//                    if (progressDialog != null && progressDialog.isShowing()) {
+//                        progressDialog.dismiss();
+//                    }
+//                    //setup the connection
+//                    WifiP2pConfig wifiP2pConfig = new WifiP2pConfig();
+//                    wifiP2pConfig.deviceAddress = wifiP2pDevice.deviceAddress;
+//                    wifiP2pConfig.wps.setup = WpsInfo.PBC;
+//
+//
+//                    //progress dialog
+//                    progressDialog = ProgressDialog.show(Home.this, "Press back to cancel",
+//                            "Connecting to :" + wifiP2pDevice.deviceAddress, true, true
+//                    );
+//
+//                    //try connecting
+//                    wifiP2pManager.connect(channel, wifiP2pConfig, new ActionListener() {
+//
+//                        @Override
+//                        public void onSuccess() {
+//
+//                        }
+//
+//                        @Override
+//                        public void onFailure(int reason) {
+//                            showMessage("Error", "Couldn't connect: " + reason);
+//                        }
+//                    });
+
                 }
             }
         });
@@ -362,17 +437,68 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         GetLocation();
+
+        boolean is_gps_provider_enabled = false;
+        //location manager helps to get current location
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        //setting boolean values for either gps or network availability
+        is_gps_provider_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+        if (!is_gps_provider_enabled) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCancelable(true);
+            builder.setTitle("Location Services");
+            builder.setMessage("Please turn on location services.");
+            builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialogInterface, int id) {
+                    //open location services setting
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                    dialogInterface.cancel();
+                }
+            });
+            builder.show();
+
+        }
         if (finalLocation == null) {
             //default is network provider
             finalLocation = LocationManager.NETWORK_PROVIDER;
+
+
         } else {
             UpdateLocation();
         }
         db.onClose();
     }
 
+
     public void onResume() {
         super.onResume();
+        //check if location services is turned off
+        boolean is_gps_provider_enabled = false;
+        //location manager helps to get current location
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        //setting boolean values for either gps or network availability
+        is_gps_provider_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+        if (!is_gps_provider_enabled) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCancelable(true);
+            builder.setTitle("Location Services");
+            builder.setMessage("Please turn on location services.");
+            builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialogInterface, int id) {
+                    //open location services setting
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                    dialogInterface.cancel();
+                }
+            });
+            builder.show();
+
+        }
         //register p2p broadcast receiver
         p2pBroadcastReceiver = new P2PBroadcastReceiver(wifiP2pManager, channel, Home.this);
         registerReceiver(p2pBroadcastReceiver, intentFilter2);
@@ -390,6 +516,7 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
 
     }
 
+    //callback for listing the found peers
     @Override
     public void onPeersAvailable(WifiP2pDeviceList wifiP2pDeviceList) {
         //remove the progressdialog
@@ -407,6 +534,14 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
             Toast.makeText(Home.this, "No peers available", Toast.LENGTH_LONG).show();
             return;
         }
+
+
+    }
+
+    //callback for peers who are connected and decide the responsibility for group owner and clients
+    @Override
+    public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
+
     }
 
     //showing google map
@@ -546,24 +681,49 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
     //check if message is sent https://stackoverflow.com/questions/19439820/notify-if-a-message-you-sent-was-sent-successfully-or-not-in-android
     public void SendMessage(String name, String message, String contact, PendingIntent sentIntent, PendingIntent deliveryIntent, double latitude, double longitude) {
 
-        if (contact == null || message == null || name == null) {
+        boolean is_gps_provider_enabled = false;
+        //location manager helps to get current location
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        //setting boolean values for either gps or network availability
+        is_gps_provider_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+        if (!is_gps_provider_enabled) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCancelable(true);
+            builder.setTitle("Location Services");
+            builder.setMessage("Please turn on location services.");
+            builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialogInterface, int id) {
+                    //open location services setting
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                    dialogInterface.cancel();
+                }
+            });
+            builder.show();
 
         } else {
-            try {
-                //use this to send if the sms text is long
-                //ArrayList<String> texts = smsManager.divideMessage(text);
-                // smsManager.sendMultipartTextMessage(phone, null, texts, null, null)
+            if (contact == null || message == null || name == null) {
 
-                //send the sms
-                SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage(contact, null, "I'm " + name + " and " + message + " My location is: "
-                        //if comma doesnt work then use encoding for the link
-                        + "http://maps.google.com/?q=" + latitude + "," + longitude + "", sentIntent, deliveryIntent);
+            } else {
+                try {
+                    //use this to send if the sms text is long
+                    //ArrayList<String> texts = smsManager.divideMessage(text);
+                    // smsManager.sendMultipartTextMessage(phone, null, texts, null, null)
 
-            } catch (Exception ex) {
-                ex.printStackTrace();
+                    //send the sms
+                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage(contact, null, "I'm " + name + " and " + message + " My location is: "
+                            //if comma doesnt work then use encoding for the link
+                            + "http://maps.google.com/?q=" + latitude + "," + longitude + "", sentIntent, deliveryIntent);
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
+
             }
-
         }
     }
 
@@ -848,7 +1008,7 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
                             //opens contact list and allows the user to select limited multiple contacts
                             Intent contactList = new Intent("intent.action.INTERACTION_TOPMENU");
                             contactList.putExtra("additional", "phone-multi");
-                            contactList.putExtra("maxRecipientCount", 4);
+                            contactList.putExtra("maxRecipientCount", 3);
                             contactList.putExtra("FromMMS", true);
 
                             startActivityForResult(contactList, CONTACT_REQUEST_CODE);
@@ -1105,15 +1265,30 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
 
             //if max amount of contacts arent selected then only add the ones that are selected
             if (contacts.size() == 1) {
+                //if uk numbers are like; 00440123456789
+                String mobileRegex = "^0{2}[0-9]{11,}";
+
                 //only add the number and trim the rest which shows the id.
                 String contact = contacts.get(0).toString();
                 String sContact = contact.substring(contact.indexOf(";") + 1);
                 sContact.trim();
-                //add it to contact textview
+
+//                if (sContact.matches(mobileRegex)) {
+//                    //remove the first 2 numbers which are "00" and add "+"
+//                    String newContact = sContact.substring(2);
+//
+//                    newContact = "+" + newContact;
+//                    contact1TextView.setText(newContact);
+//
+//                    sFinalContact1 = newContact;
+//
+//
+//                } else {
+//                    //add it to contact textview
                 contact1TextView.setText(sContact);
 
                 sFinalContact1 = sContact;
-
+//                }
             } else {
 
             }
@@ -1129,7 +1304,7 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
 
                 //only add the number and trim the rest which shows the id.
                 String contact2 = contacts.get(1).toString();
-                String sContact2 = contact.substring(contact2.indexOf(";") + 1);
+                String sContact2 = contact2.substring(contact2.indexOf(";") + 1);
                 sContact2.trim();
                 //add it to contact text view
                 contact2TextView.setText(sContact2);

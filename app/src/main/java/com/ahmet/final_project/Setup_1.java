@@ -2,6 +2,7 @@ package com.ahmet.final_project;
 
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -9,11 +10,15 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -69,6 +74,32 @@ public class Setup_1 extends Fragment {
         nameText.setText(name);
         messageText.setText(message);
 
+        //when clicked next after filled, go next page
+        nameText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int action, KeyEvent keyEvent) {
+                if (action == EditorInfo.IME_ACTION_NEXT) {
+                    String checkNameText = nameText.getText().toString();
+                    String message = messageText.getText().toString();
+
+                    //check if textboxes are empty
+                    if (checkNameText.equals("") || message.equals("")) {
+                        //if empty then output toast
+                        Toast.makeText(getActivity(), "Fields need to be filled in order to continue!", Toast.LENGTH_LONG).show();
+                    } else {
+
+                        CompleteSetup();
+                        //hides the keyboard
+                        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                    }
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
         goNextPage();
         goBack();
         return view;
@@ -78,43 +109,47 @@ public class Setup_1 extends Fragment {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                CompleteSetup();
 
-                String checkNameText = nameText.getText().toString();
-                String message = messageText.getText().toString();
+            }
+        });
+    }
 
-                //check if textboxes are empty
-                if (checkNameText.equals("") || message.equals("")) {
-                    //if empty then output toast
-                    Toast.makeText(getActivity(), "Fields need to be filled in order to continue!", Toast.LENGTH_LONG).show();
-                } else {
+    public void CompleteSetup() {
+        String checkNameText = nameText.getText().toString();
+        String message = messageText.getText().toString();
+
+        //check if textboxes are empty
+        if (checkNameText.equals("") || message.equals("")) {
+            //if empty then output toast
+            Toast.makeText(getActivity(), "Fields need to be filled in order to continue!", Toast.LENGTH_LONG).show();
+        } else {
 
 //                    //adding information to the following columns in that method
 //                    boolean insertedData = db.addSetup1(checkNameText, checkNumberText, message);
 //                    if (insertedData == true) {
 
-                    Main main = (Main) getActivity();
-                    //adding the input fields to the related setter in main activity,
-                    // so at the very end of the setup it can be pulled from the getter to add into the db
-                    String setName = checkNameText;
-                    main.setName(setName);
+            Main main = (Main) getActivity();
+            //adding the input fields to the related setter in main activity,
+            // so at the very end of the setup it can be pulled from the getter to add into the db
+            String setName = checkNameText;
+            main.setName(setName);
 
-                    String setMessage = message;
-                    main.setMessage(setMessage);
+            String setMessage = message;
+            main.setMessage(setMessage);
 
-                    //opens the next setup
-                    Setup_2 setup_2 = new Setup_2();
-                    FragmentManager manager = getFragmentManager();
-                    //replacing the fragment inside the layout
-                    manager.beginTransaction().replace(R.id.layout_Fragment, setup_2).addToBackStack(null).commit();
+            //opens the next setup
+            Setup_2 setup_2 = new Setup_2();
+            FragmentManager manager = getFragmentManager();
+            //replacing the fragment inside the layout
+            manager.beginTransaction().replace(R.id.layout_Fragment, setup_2).addToBackStack(null).commit();
 
 //                    } else {
 //                        Toast.makeText(getActivity(), "Data couldn't be added!", Toast.LENGTH_LONG).show();
 //
 //                    }
 
-                }
-            }
-        });
+        }
     }
 
     public void goBack() {

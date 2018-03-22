@@ -187,9 +187,11 @@ public class PowerButtonActivation extends BroadcastReceiver {
 
             //initialise pending intents for broadcast receiver to listen for whenever the message is sent and delivered
             PendingIntent sentPendingIntent = PendingIntent.getBroadcast(context, 0, new Intent(
-                    sent), 0);
+                    sent), PendingIntent.FLAG_UPDATE_CURRENT
+            );
             PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(context, 0,
-                    new Intent(delivered), 0);
+                    new Intent(delivered), PendingIntent.FLAG_UPDATE_CURRENT
+            );
             //register the receivers
             context.getApplicationContext().registerReceiver(sentMessageBroadcastReceiver, new IntentFilter(sent));
             context.getApplicationContext().registerReceiver(deliveredMessageBroadcastReceiver, new IntentFilter(delivered));

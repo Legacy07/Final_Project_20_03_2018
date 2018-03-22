@@ -41,38 +41,44 @@ public class DeliveredMessageBroadcastReceiver extends BroadcastReceiver {
         db = new DbHandler(context);
         contact1 = db.getContact1().toString();
 
+        //get location
+        GetLocation(context);
+
+
+        // receiving sms -- https://stackoverflow.com/questions/17720965/perfom-an-action-on-getting-specific-text-in-sms-in-android
+
+        //might help for receiving from specific contact -- https://web.archive.org/web/20121022021217/http://mobdev.olin.edu/mobdevwiki/FrontPage/Tutorials/SMS%20Messaging
+
         switch (getResultCode()) {
             //if message is delivered then notify the user
             case Activity.RESULT_OK:
                 db.OnOPen();
                 //Sending notification after a successful sent message
                 home.Notification(context, 1, R.drawable.ic_tick, Color.RED, notificationTitle, notificationBody + contact1);
-                //get location
-                GetLocation(context);
+
                 //if gps or network are off do nothing else send update message also getting the location update
                 if (finalLocation == null) {
 
                 } else {
                     UpdateLocation(context);
                 }
-                SendUpdateMessage(context);
+//                SendUpdateMessage(context);
 
-                //delay for 5 seconds
-//                Timer timer = new Timer();
-//                timer.schedule(new TimerTask() {
-//                    @Override
-//                    public void run() {
-//                        //send message
-//                        SendUpdateMessage(context);
-//                    }
-//                }, 5000);
+//                delay for 5 seconds
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        //send message
+                        SendUpdateMessage(context);
+                    }
+                }, 5000);
 
                 db.onClose();
                 break;
             case Activity.RESULT_CANCELED:
-                //if not delivered, notify the user
-                Toast.makeText(context, "SMS cannot be delivered!",
-                        Toast.LENGTH_LONG).show();
+                home.Notification(context, 1, R.drawable.ic_tick, Color.RED, "Unable to deliver the message", "Message couldn't be sent to: " + contact1);
+
                 break;
         }
     }

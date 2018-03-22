@@ -67,6 +67,7 @@
             android:background="@drawable/rounded_edittext"
             android:ems="10"
             android:inputType="textPersonName"
+            android:imeOptions="actionNext"
             android:padding="3dp" />
 
         <!--<TextView-->
