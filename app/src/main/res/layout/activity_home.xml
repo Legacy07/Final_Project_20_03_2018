@@ -47,14 +47,54 @@
         android:textColor="@color/colorWhite"
         android:textSize="20dp" />
 
+    <TextView
+        android:id="@+id/peersTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sosButton"
+        android:text="Peers
+ ---------------------------------------------------------" />
+
+    <TextView
+        android:id="@+id/groupOwnerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/peersTextView"
+        android:text="Group owner ip - " />
+
+    <TextView
+        android:id="@+id/connectedPeersTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/groupOwnerTextView"
+        android:text="Connected Peer Name" />
+
+    <TextView
+        android:id="@+id/connectedTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/connectedPeersTextView"
+        android:text="Connected or not" />
+
+    <Button
+        android:id="@+id/disconnectButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sosButton"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="60dp"
+        android:text="Disconnect"
+        android:visibility="gone"/>
+
     <RelativeLayout
         android:id="@+id/firstBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/showButton"
+        android:layout_below="@+id/connectedTextView"
         android:layout_marginTop="10dp"
         android:background="@drawable/bottom_box">
+
 
         <TextView
             android:id="@+id/headerText"

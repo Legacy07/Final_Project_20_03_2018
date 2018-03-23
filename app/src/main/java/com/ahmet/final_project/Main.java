@@ -25,7 +25,7 @@ public class Main extends AppCompatActivity {
     //variables to hold information from setup fragments and ad it to the database
     private String name = "Ahmet";
     private String message = "I'm in danger, message me back as soon as possible.";
-    private String contact1 = "";
+    private String contact1 = "+447740061788";
     private String contact2 = "";
     private String contact3 = "";
     private String contact4 = "";

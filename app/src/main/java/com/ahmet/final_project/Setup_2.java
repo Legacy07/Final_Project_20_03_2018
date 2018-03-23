@@ -121,7 +121,6 @@ public class Setup_2 extends Fragment {
         contactText2.setText(contact2);
         contactText3.setText(contact3);
 
-
         AddContact1();
         goNextPage();
         goBack();

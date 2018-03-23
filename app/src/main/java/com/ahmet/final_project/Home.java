@@ -1,27 +1,16 @@
 package com.ahmet.final_project;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.appwidget.AppWidgetProvider;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -36,24 +25,18 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
-import android.net.wifi.p2p.WifiP2pManager.ChannelListener;
 import android.os.Handler;
-import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.webkit.WebViewFragment;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -62,8 +45,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApi;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -71,17 +52,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.w3c.dom.Text;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
 import java.net.URLEncoder;
-import java.sql.Ref;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener {
 
@@ -140,6 +115,7 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
     Channel channel;
     WifiP2pManager wifiP2pManager;
     public WifiP2pDevice wifiP2pDevice;
+    WifiP2pInfo wifiP2pInfo;
 
     ProgressDialog progressDialog = null;
 
@@ -527,9 +503,30 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
         peersList.clear();
         //add it to the list and show it in a message box
         peersList.addAll(wifiP2pDeviceList.getDeviceList());
-        showMessage("Peers", peersList.toString());
-//                Toast.makeText(Home.this, "Peers found!", Toast.LENGTH_LONG).show();
+//        showMessage("Peers", peersList.toString());
 
+        for (int i = 0; i < peersList.size(); i++) {
+            wifiP2pDevice = (WifiP2pDevice) peersList.get(i);
+//            String deviceName=wifiP2pDevice.deviceName;
+//            int devicestatus=wifiP2pDevice.status;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle("Found Peers");
+        builder.setMessage("Connect to this peer?" + "\n " + peersList.toString());
+        builder.setPositiveButton("Connect", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogInterface, int id) {
+                //setup the connection
+                WifiP2pConfig wifiP2pConfig = new WifiP2pConfig();
+                wifiP2pConfig.deviceAddress = wifiP2pDevice.deviceAddress;
+                wifiP2pConfig.wps.setup = WpsInfo.PBC;
+                //connect to the peer
+                Connect();
+
+            }
+        });
+        builder.show();
         if (peersList.size() == 0) {
             Toast.makeText(Home.this, "No peers available", Toast.LENGTH_LONG).show();
             return;
@@ -538,10 +535,94 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
 
     }
 
+    public void Connect() {
+        //remove the progress dialog
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+
+        //progress dialog
+        progressDialog = ProgressDialog.show(Home.this, "Press back to cancel",
+                "Connecting to :" + wifiP2pDevice.deviceAddress, true, true
+        );
+
+        //try connecting
+        wifiP2pManager.createGroup(channel, new ActionListener() {
+
+            @Override
+            public void onSuccess() {
+                showMessage("Success", "Connected!");
+
+            }
+
+            @Override
+            public void onFailure(int reason) {
+                showMessage("Error", "Couldn't connect: " + reason);
+            }
+        });
+
+    }
+
     //callback for peers who are connected and decide the responsibility for group owner and clients
     @Override
-    public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
+    public void onConnectionInfoAvailable(final WifiP2pInfo wifiP2pInfo) {
+        //update this
 
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+        this.wifiP2pInfo = wifiP2pInfo;
+
+        WifiP2pDevice device = this.wifiP2pDevice;
+        final TextView deviceName = (TextView) findViewById(R.id.connectedPeersTextView);
+
+        final TextView groupOwner = (TextView) findViewById(R.id.groupOwnerTextView);
+
+        //when the connection is successful a group will be formed with no password request
+        //the group owner will be the one who started discovery and be abe to send message
+        if (wifiP2pInfo.groupFormed && wifiP2pInfo.isGroupOwner) {
+
+//            //Shows the connected device
+            deviceName.setText("Device Name: " + device.deviceName);
+//            // shows the group owner ip address
+            groupOwner.setText("Group Owner IP - " + wifiP2pInfo.groupOwnerAddress.getHostAddress().toString());
+
+            //the other device will be the client in this case and receive the message
+        } else if (wifiP2pInfo.groupFormed) {
+//            //Shows the connected device name
+            deviceName.setText("Device Name: " + device.deviceName.toString());
+//
+//            //shows the group owner ip address
+            groupOwner.setText("Group Owner IP - " + wifiP2pInfo.groupOwnerAddress.getHostAddress().toString());
+        }
+
+        final Button disconnect = (Button) findViewById(R.id.disconnectButton);
+        disconnect.setVisibility(View.VISIBLE);
+
+        disconnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //remove from the group
+                wifiP2pManager.removeGroup(channel, new ActionListener() {
+
+                    @Override
+                    public void onFailure(int reasonCode) {
+                        showMessage("Error", "Disconnection failed " + reasonCode);
+
+                    }
+
+                    @Override
+                    public void onSuccess() {
+                        deviceName.setText("Disconnected");
+                        groupOwner.setText("No Group Owner");
+                        peersList.clear();
+
+                        disconnect.setVisibility(View.GONE);
+                    }
+
+                });
+            }
+        });
     }
 
     //showing google map

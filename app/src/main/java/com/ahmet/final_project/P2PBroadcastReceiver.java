@@ -54,17 +54,18 @@ public class P2PBroadcastReceiver extends BroadcastReceiver {
             } else {
                 home.WifiP2PEnabled(false);
             }
-        } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
+
+        } //checks for changed peers in the list
+        else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
 
             //fetch list -- https://developer.android.com/training/connect-devices-wirelessly/wifi-direct.html#fetch
             //finding the peers
             if (manager != null) {
                 manager.requestPeers(channel, home);
             }
-//            Log.d(Home.TAG, "Nearby peers have changed");
 
-
-        } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
+        }//checks for connections
+        else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
 
             if (manager == null) {
                 return;
@@ -78,11 +79,8 @@ public class P2PBroadcastReceiver extends BroadcastReceiver {
                 manager.requestConnectionInfo(channel, home);
             }
 
-        } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
-//            DeviceListFragment fragment = (DeviceListFragment) activity.getFragmentManager()
-//                    .findFragmentById(R.id.frag_list);
-//            fragment.updateThisDevice((WifiP2pDevice) intent.getParcelableExtra(
-//                    WifiP2pManager.EXTRA_WIFI_P2P_DEVICE));
+        }//checks for wifi state change
+        else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
 
         }
 
