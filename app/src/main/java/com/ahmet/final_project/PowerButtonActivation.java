@@ -14,6 +14,10 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.wifi.WpsInfo;
+import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pInfo;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
@@ -21,17 +25,27 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.telephony.SmsManager;
 import android.widget.Toast;
+import android.net.wifi.p2p.WifiP2pConfig;
+import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.net.wifi.p2p.WifiP2pInfo;
+import android.net.wifi.p2p.WifiP2pManager;
+import android.net.wifi.p2p.WifiP2pManager.ActionListener;
+import android.net.wifi.p2p.WifiP2pManager.Channel;
+
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class PowerButtonActivation extends BroadcastReceiver {
+public class PowerButtonActivation extends BroadcastReceiver implements WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener {
 
     //to check if the screen is off or not
     public boolean screenState;
@@ -47,6 +61,7 @@ public class PowerButtonActivation extends BroadcastReceiver {
     long time1;
     long time2;
 
+    int notificationChannel = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
 
     Location location;
     String networkProvider = "";
@@ -61,11 +76,39 @@ public class PowerButtonActivation extends BroadcastReceiver {
 
     Home home;
     String[] time = new String[2];
+    private List peersList = new ArrayList();
+    public WifiP2pDevice wifiP2pDevice;
+    WifiP2pInfo wifiP2pInfo;
+
+    WifiP2pManager wifiP2pManager;
+    Channel channel;
+
+    Context mContext;
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(final Context context, Intent intent) {
         home = new Home();
         db = new DbHandler(context);
+
+        this.mContext = context;
+        // intent filters for wifi p2p broadcast receiver
+        IntentFilter intentFilter2 = new IntentFilter();
+
+        //wifi p2p status
+        intentFilter2.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+        // checks for the change of the available peers.
+        intentFilter2.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+        // checks the state of the connectivity
+        intentFilter2.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+        // checks for device's status
+        intentFilter2.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
+        //register p2p broadcast receiver
+        BroadcastReceiver p2pBroadcastReceiver = new P2PBroadcastReceiver(wifiP2pManager, channel, PowerButtonActivation.this);
+        context.getApplicationContext().registerReceiver(p2pBroadcastReceiver, intentFilter2);
+
+        wifiP2pManager = (WifiP2pManager) context.getApplicationContext().getSystemService(Context.WIFI_P2P_SERVICE);
+        channel = wifiP2pManager.initialize(context, context.getApplicationContext().getMainLooper(), null);
 
 //        //get the data from db
 //        String contact1 = db.getContact1().toString();
@@ -167,41 +210,59 @@ public class PowerButtonActivation extends BroadcastReceiver {
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
         if (notificationClicked != null) {
-            db.OnOPen();
-            //get location
-            GetLocation(context);
+//            db.OnOPen();
+//            //get location
+//            GetLocation(context);
+//
+//            //get the data from db
+//            String contact1 = db.getContact1().toString();
+//            String message = db.getMessage().toString();
+//            String name = db.getName().toString();
+//
+//            if (finalLocation == null) {
+//
+//            } else {
+//                UpdateLocation(context);
+//            }
+//
+//            String sent = "SENT";
+//            String delivered = "DELIVERED";
+//
+//            //initialise pending intents for broadcast receiver to listen for whenever the message is sent and delivered
+//            PendingIntent sentPendingIntent = PendingIntent.getBroadcast(context, 0, new Intent(
+//                    sent), PendingIntent.FLAG_UPDATE_CURRENT
+//            );
+//            PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(context, 0,
+//                    new Intent(delivered), PendingIntent.FLAG_UPDATE_CURRENT
+//            );
+//            //register the receivers
+//            context.getApplicationContext().registerReceiver(sentMessageBroadcastReceiver, new IntentFilter(sent));
+//            context.getApplicationContext().registerReceiver(deliveredMessageBroadcastReceiver, new IntentFilter(delivered));
+//            //send the message
+//            home.SendMessage(name, message, contact1, sentPendingIntent, deliveredPendingIntent, latitude, longitude);
+//            // /https://developer.android.com/training/notify-user/build-notification.html
+//            //Sending notification after a successful sent message
+//            //SendUpdateMessage(context);
+//
+//            db.onClose();
 
-            //get the data from db
-            String contact1 = db.getContact1().toString();
-            String message = db.getMessage().toString();
-            String name = db.getName().toString();
 
-            if (finalLocation == null) {
+            //discover the devices
+            wifiP2pManager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
 
-            } else {
-                UpdateLocation(context);
-            }
+                @Override
+                public void onSuccess() {
+                    home.Notification(context, notificationChannel, R.drawable.ic_tick, Color.RED, "Success", "Discovery Initiated");
 
-            String sent = "SENT";
-            String delivered = "DELIVERED";
 
-            //initialise pending intents for broadcast receiver to listen for whenever the message is sent and delivered
-            PendingIntent sentPendingIntent = PendingIntent.getBroadcast(context, 0, new Intent(
-                    sent), PendingIntent.FLAG_UPDATE_CURRENT
-            );
-            PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(context, 0,
-                    new Intent(delivered), PendingIntent.FLAG_UPDATE_CURRENT
-            );
-            //register the receivers
-            context.getApplicationContext().registerReceiver(sentMessageBroadcastReceiver, new IntentFilter(sent));
-            context.getApplicationContext().registerReceiver(deliveredMessageBroadcastReceiver, new IntentFilter(delivered));
-            //send the message
-            home.SendMessage(name, message, contact1, sentPendingIntent, deliveredPendingIntent, latitude, longitude);
-            // /https://developer.android.com/training/notify-user/build-notification.html
-            //Sending notification after a successful sent message
-            //SendUpdateMessage(context);
+                }
 
-            db.onClose();
+                @Override
+                public void onFailure(int reasonCode) {
+                    home.Notification(context, notificationChannel, R.drawable.ic_tick, Color.RED, "Error", "Discovery Failed - " + reasonCode);
+
+                }
+            });
         } else {
         }
 
@@ -351,4 +412,111 @@ public class PowerButtonActivation extends BroadcastReceiver {
         }
 
     }
+
+    @Override
+    public void onPeersAvailable(WifiP2pDeviceList wifiP2pDeviceList) {
+        // changing peers when available
+        peersList.clear();
+        //add it to the list and show it in a message box
+        peersList.addAll(wifiP2pDeviceList.getDeviceList());
+//        showMessage("Peers", peersList.toString());
+
+        for (int i = 0; i < peersList.size(); i++) {
+            wifiP2pDevice = (WifiP2pDevice) peersList.get(i);
+//            String deviceName=wifiP2pDevice.deviceName;
+//            int devicestatus=wifiP2pDevice.status;
+        }
+
+
+        //setup the connection
+        WifiP2pConfig wifiP2pConfig = new WifiP2pConfig();
+        wifiP2pConfig.deviceAddress = wifiP2pDevice.deviceAddress;
+        wifiP2pConfig.wps.setup = WpsInfo.PBC;
+        //connect to the peer
+        Connect();
+        if (peersList.size() == 0) {
+            home.Notification(mContext, notificationChannel, R.drawable.ic_tick, Color.RED, "Error", "No peers available");
+            return;
+        }
+
+
+    }
+
+    public void Connect() {
+
+        //try connecting
+        wifiP2pManager.createGroup(channel, new ActionListener() {
+
+            @Override
+            public void onSuccess() {
+//                System.out.println("Connection established");
+                home.Notification(mContext, notificationChannel, R.drawable.ic_tick, Color.RED, "Success", "Connection Established");
+
+            }
+
+            @Override
+            public void onFailure(int reason) {
+//                System.out.println("Connection failed " + reason);
+                home.Notification(mContext, notificationChannel, R.drawable.ic_tick, Color.RED, "Error", "Connection failed: " + reason);
+
+            }
+        });
+
+    }
+
+    @Override
+    public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
+        this.wifiP2pInfo = wifiP2pInfo;
+
+        WifiP2pDevice device = this.wifiP2pDevice;
+
+        //when the connection is successful a group will be formed with no password request
+        //the group owner will be the one who started discovery and be abe to send message
+        if (wifiP2pInfo.groupFormed && wifiP2pInfo.isGroupOwner) {
+            //Shows the connected device and shows the group owner ip address in notification
+
+//            System.out.println("Peer device name: " + device.deviceName + ", Group Owner IP: " + wifiP2pInfo.groupOwnerAddress.getHostAddress().toString());
+            home.Notification(mContext, notificationChannel, R.drawable.ic_tick, Color.RED, "Success", "Peer device name: " + device.deviceName +
+                    ", Group Owner IP: " + wifiP2pInfo.groupOwnerAddress.getHostAddress().toString());
+
+
+            //the other device will be the client in this case and receive the message
+        } else if (wifiP2pInfo.groupFormed) {
+            //Shows the connected device and shows the group owner ip address in notification
+
+//            System.out.println("Peer device name: " + device.deviceName + ", Group Owner IP: " + wifiP2pInfo.groupOwnerAddress.getHostAddress().toString());
+            home.Notification(mContext, notificationChannel, R.drawable.ic_tick, Color.RED, "Success", "Peer device name: " + device.deviceName +
+                    ", Group Owner IP: " + wifiP2pInfo.groupOwnerAddress.getHostAddress().toString());
+        }
+
+//        final Button disconnect = (Button) findViewById(R.id.disconnectButton);
+//        disconnect.setVisibility(View.VISIBLE);
+//
+//        disconnect.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //remove from the group
+//                wifiP2pManager.removeGroup(channel, new ActionListener() {
+//
+//                    @Override
+//                    public void onFailure(int reasonCode) {
+//                        showMessage("Error", "Disconnection failed " + reasonCode);
+//
+//                    }
+//
+//                    @Override
+//                    public void onSuccess() {
+//                        deviceName.setText("Disconnected");
+//                        groupOwner.setText("No Group Owner");
+//                        peersList.clear();
+//
+//                        disconnect.setVisibility(View.GONE);
+//                    }
+//
+//                });
+//            }
+//        });
+    }
+
+
 }

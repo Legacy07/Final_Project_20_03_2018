@@ -58,7 +58,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener {
+public class Home extends AppCompatActivity implements OnMapReadyCallback/* WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener*/ {
 
     Button sosButton;
     Button showButton;
@@ -294,17 +294,17 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //initialise wifi p2p service and channel for connection
-        wifiP2pManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-        channel = wifiP2pManager.initialize(this, getMainLooper(), null);
-
-        //wifi p2p status
-        intentFilter2.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
-        // checks for the change of the available peers.
-        intentFilter2.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
-        // checks the state of the connectivity
-        intentFilter2.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-        // checks for device's status
-        intentFilter2.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+//        wifiP2pManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+//        channel = wifiP2pManager.initialize(this, getMainLooper(), null);
+//
+//        //wifi p2p status
+//        intentFilter2.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+//        // checks for the change of the available peers.
+//        intentFilter2.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+//        // checks the state of the connectivity
+//        intentFilter2.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+//        // checks for device's status
+//        intentFilter2.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
 ////        //listening for nearby peers and updating it
 //        peerListListener = new WifiP2pManager.PeerListListener() {
@@ -343,38 +343,38 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
 //                https://developer.android.com/guide/topics/connectivity/wifip2p.html
 //                https://android.googlesource.com/platform/development/+/master/samples/WiFiDirectDemo/
 
-                if (!isWifiP2pEnabled) {
-                    //if wifi isnt enabled turn on wifi
-                    WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-                    //turn on the wifi service
-                    wifiManager.setWifiEnabled(true);
-                } else {
-                    if (progressDialog != null && progressDialog.isShowing()) {
-                        progressDialog.dismiss();
-                    }
-                    progressDialog = ProgressDialog.show(Home.this, "Press back to cancel", "Searching for nearby peers",
-                            true, true, new DialogInterface.OnCancelListener() {
-
-                                @Override
-                                public void onCancel(DialogInterface dialog) {
-                                }
-                            });
-                    //discover the devices
-                    wifiP2pManager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
-
-                        @Override
-                        public void onSuccess() {
-                            Toast.makeText(Home.this, "Started Discovery for nearby peers",
-                                    Toast.LENGTH_SHORT).show();
-
-                        }
-
-                        @Override
-                        public void onFailure(int reasonCode) {
-                            Toast.makeText(Home.this, "Discovery Failed : " + reasonCode,
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
+//                if (!isWifiP2pEnabled) {
+//                    //if wifi isnt enabled turn on wifi
+//                    WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+//                    //turn on the wifi service
+//                    wifiManager.setWifiEnabled(true);
+//                } else {
+//                    if (progressDialog != null && progressDialog.isShowing()) {
+//                        progressDialog.dismiss();
+//                    }
+//                    progressDialog = ProgressDialog.show(Home.this, "Press back to cancel", "Searching for nearby peers",
+//                            true, true, new DialogInterface.OnCancelListener() {
+//
+//                                @Override
+//                                public void onCancel(DialogInterface dialog) {
+//                                }
+//                            });
+//                    //discover the devices
+//                    wifiP2pManager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
+//
+//                        @Override
+//                        public void onSuccess() {
+//                            Toast.makeText(Home.this, "Started Discovery for nearby peers",
+//                                    Toast.LENGTH_SHORT).show();
+//
+//                        }
+//
+//                        @Override
+//                        public void onFailure(int reasonCode) {
+//                            Toast.makeText(Home.this, "Discovery Failed : " + reasonCode,
+//                                    Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
 
 //                    //remove the progress dialog
 //                    if (progressDialog != null && progressDialog.isShowing()) {
@@ -405,7 +405,7 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
 //                        }
 //                    });
 
-                }
+//                }
             }
         });
 
@@ -476,14 +476,14 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
 
         }
         //register p2p broadcast receiver
-        p2pBroadcastReceiver = new P2PBroadcastReceiver(wifiP2pManager, channel, Home.this);
-        registerReceiver(p2pBroadcastReceiver, intentFilter2);
+//        p2pBroadcastReceiver = new P2PBroadcastReceiver(wifiP2pManager, channel, Home.this);
+//        registerReceiver(p2pBroadcastReceiver, intentFilter2);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        unregisterReceiver(p2pBroadcastReceiver);
+//        unregisterReceiver(p2pBroadcastReceiver);
     }
 
     //setting to toggle if wifi p2p is turned on or not
@@ -493,137 +493,141 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback, WifiP
     }
 
     //callback for listing the found peers
-    @Override
-    public void onPeersAvailable(WifiP2pDeviceList wifiP2pDeviceList) {
-        //remove the progressdialog
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
-        // changing peers when available
-        peersList.clear();
-        //add it to the list and show it in a message box
-        peersList.addAll(wifiP2pDeviceList.getDeviceList());
-//        showMessage("Peers", peersList.toString());
+//    @Override
+//    public void onPeersAvailable(WifiP2pDeviceList wifiP2pDeviceList) {
+//        //remove the progressdialog
+//        if (progressDialog != null && progressDialog.isShowing()) {
+//            progressDialog.dismiss();
+//        }
+//        // changing peers when available
+//        peersList.clear();
+//        //add it to the list and show it in a message box
+//        peersList.addAll(wifiP2pDeviceList.getDeviceList());
+////        showMessage("Peers", peersList.toString());
+//
+//        for (int i = 0; i < peersList.size(); i++) {
+//            wifiP2pDevice = (WifiP2pDevice) peersList.get(i);
+////            String deviceName=wifiP2pDevice.deviceName;
+////            int devicestatus=wifiP2pDevice.status;
+//        }
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setCancelable(true);
+//        builder.setTitle("Found Peers");
+//        builder.setMessage("Connect to this peer?" + "\n " + peersList.toString());
+//        builder.setPositiveButton("Connect", new DialogInterface.OnClickListener() {
+//            public void onClick(DialogInterface dialogInterface, int id) {
+//                //setup the connection
+//                WifiP2pConfig wifiP2pConfig = new WifiP2pConfig();
+//                wifiP2pConfig.deviceAddress = wifiP2pDevice.deviceAddress;
+//                wifiP2pConfig.wps.setup = WpsInfo.PBC;
+//                //connect to the peer
+//                Connect();
+//
+//            }
+//        });
+//        builder.show();
+//        if (peersList.size() == 0) {
+//            Toast.makeText(Home.this, "No peers available", Toast.LENGTH_LONG).show();
+//            return;
+//        }
+//
+//
+//    }
 
-        for (int i = 0; i < peersList.size(); i++) {
-            wifiP2pDevice = (WifiP2pDevice) peersList.get(i);
-//            String deviceName=wifiP2pDevice.deviceName;
-//            int devicestatus=wifiP2pDevice.status;
-        }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(true);
-        builder.setTitle("Found Peers");
-        builder.setMessage("Connect to this peer?" + "\n " + peersList.toString());
-        builder.setPositiveButton("Connect", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int id) {
-                //setup the connection
-                WifiP2pConfig wifiP2pConfig = new WifiP2pConfig();
-                wifiP2pConfig.deviceAddress = wifiP2pDevice.deviceAddress;
-                wifiP2pConfig.wps.setup = WpsInfo.PBC;
-                //connect to the peer
-                Connect();
-
-            }
-        });
-        builder.show();
-        if (peersList.size() == 0) {
-            Toast.makeText(Home.this, "No peers available", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-
-    }
-
-    public void Connect() {
-        //remove the progress dialog
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
-
-        //progress dialog
-        progressDialog = ProgressDialog.show(Home.this, "Press back to cancel",
-                "Connecting to :" + wifiP2pDevice.deviceAddress, true, true
-        );
-
-        //try connecting
-        wifiP2pManager.createGroup(channel, new ActionListener() {
-
-            @Override
-            public void onSuccess() {
-                showMessage("Success", "Connected!");
-
-            }
-
-            @Override
-            public void onFailure(int reason) {
-                showMessage("Error", "Couldn't connect: " + reason);
-            }
-        });
-
-    }
+//    public void Connect() {
+//        //remove the progress dialog
+//        if (progressDialog != null && progressDialog.isShowing()) {
+//            progressDialog.dismiss();
+//        }
+//
+//        //progress dialog
+//        progressDialog = ProgressDialog.show(Home.this, "Press back to cancel",
+//                "Connecting to :" + wifiP2pDevice.deviceAddress, true, true
+//        );
+//
+//        //try connecting
+//        wifiP2pManager.createGroup(channel, new ActionListener() {
+//
+//            @Override
+//            public void onSuccess() {
+//                showMessage("Success", "Connected!");
+//
+//            }
+//
+//            @Override
+//            public void onFailure(int reason) {
+//                showMessage("Error", "Couldn't connect: " + reason);
+//
+//                if (progressDialog != null && progressDialog.isShowing()) {
+//                    progressDialog.dismiss();
+//                }
+//            }
+//        });
+//
+//    }
 
     //callback for peers who are connected and decide the responsibility for group owner and clients
-    @Override
-    public void onConnectionInfoAvailable(final WifiP2pInfo wifiP2pInfo) {
-        //update this
-
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
-        this.wifiP2pInfo = wifiP2pInfo;
-
-        WifiP2pDevice device = this.wifiP2pDevice;
-        final TextView deviceName = (TextView) findViewById(R.id.connectedPeersTextView);
-
-        final TextView groupOwner = (TextView) findViewById(R.id.groupOwnerTextView);
-
-        //when the connection is successful a group will be formed with no password request
-        //the group owner will be the one who started discovery and be abe to send message
-        if (wifiP2pInfo.groupFormed && wifiP2pInfo.isGroupOwner) {
-
-//            //Shows the connected device
-            deviceName.setText("Device Name: " + device.deviceName);
-//            // shows the group owner ip address
-            groupOwner.setText("Group Owner IP - " + wifiP2pInfo.groupOwnerAddress.getHostAddress().toString());
-
-            //the other device will be the client in this case and receive the message
-        } else if (wifiP2pInfo.groupFormed) {
-//            //Shows the connected device name
-            deviceName.setText("Device Name: " + device.deviceName.toString());
+//    @Override
+//    public void onConnectionInfoAvailable(final WifiP2pInfo wifiP2pInfo) {
+//        //update this
 //
-//            //shows the group owner ip address
-            groupOwner.setText("Group Owner IP - " + wifiP2pInfo.groupOwnerAddress.getHostAddress().toString());
-        }
-
-        final Button disconnect = (Button) findViewById(R.id.disconnectButton);
-        disconnect.setVisibility(View.VISIBLE);
-
-        disconnect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //remove from the group
-                wifiP2pManager.removeGroup(channel, new ActionListener() {
-
-                    @Override
-                    public void onFailure(int reasonCode) {
-                        showMessage("Error", "Disconnection failed " + reasonCode);
-
-                    }
-
-                    @Override
-                    public void onSuccess() {
-                        deviceName.setText("Disconnected");
-                        groupOwner.setText("No Group Owner");
-                        peersList.clear();
-
-                        disconnect.setVisibility(View.GONE);
-                    }
-
-                });
-            }
-        });
-    }
+//        if (progressDialog != null && progressDialog.isShowing()) {
+//            progressDialog.dismiss();
+//        }
+//        this.wifiP2pInfo = wifiP2pInfo;
+//
+//        WifiP2pDevice device = this.wifiP2pDevice;
+//        final TextView deviceName = (TextView) findViewById(R.id.connectedPeersTextView);
+//
+//        final TextView groupOwner = (TextView) findViewById(R.id.groupOwnerTextView);
+//
+//        //when the connection is successful a group will be formed with no password request
+//        //the group owner will be the one who started discovery and be abe to send message
+//        if (wifiP2pInfo.groupFormed && wifiP2pInfo.isGroupOwner) {
+//
+////            //Shows the connected device
+//            deviceName.setText("Device Name: " + device.deviceName);
+////            // shows the group owner ip address
+//            groupOwner.setText("Group Owner IP - " + wifiP2pInfo.groupOwnerAddress.getHostAddress().toString());
+//
+//            //the other device will be the client in this case and receive the message
+//        } else if (wifiP2pInfo.groupFormed) {
+////            //Shows the connected device name
+//            deviceName.setText("Device Name: " + device.deviceName.toString());
+////
+////            //shows the group owner ip address
+//            groupOwner.setText("Group Owner IP - " + wifiP2pInfo.groupOwnerAddress.getHostAddress().toString());
+//        }
+//
+//        final Button disconnect = (Button) findViewById(R.id.disconnectButton);
+//        disconnect.setVisibility(View.VISIBLE);
+//
+//        disconnect.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //remove from the group
+//                wifiP2pManager.removeGroup(channel, new ActionListener() {
+//
+//                    @Override
+//                    public void onFailure(int reasonCode) {
+//                        showMessage("Error", "Disconnection failed " + reasonCode);
+//
+//                    }
+//
+//                    @Override
+//                    public void onSuccess() {
+//                        deviceName.setText("Disconnected");
+//                        groupOwner.setText("No Group Owner");
+//                        peersList.clear();
+//
+//                        disconnect.setVisibility(View.GONE);
+//                    }
+//
+//                });
+//            }
+//        });
+//    }
 
     //showing google map
     @Override

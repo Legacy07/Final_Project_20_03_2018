@@ -23,17 +23,17 @@ public class P2PBroadcastReceiver extends BroadcastReceiver {
 
     private WifiP2pManager manager;
     private Channel channel;
-    private Home home;
+    private PowerButtonActivation powerButtonActivation;
 
     private WifiP2pManager.PeerListListener peerListListener;
 
     //getting the connection from the activity to listen
     public P2PBroadcastReceiver(WifiP2pManager manager, Channel channel,
-                                Home home) {
+                                PowerButtonActivation powerButtonActivation) {
         super();
         this.manager = manager;
         this.channel = channel;
-        this.home = home;
+        this.powerButtonActivation = powerButtonActivation;
 
 //        this.peerListListener = peerListListener1;
 
@@ -50,9 +50,9 @@ public class P2PBroadcastReceiver extends BroadcastReceiver {
             int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
             if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
                 //set to true
-                home.WifiP2PEnabled(true);
+//                backgroundServiceUpdate.WifiP2PEnabled(true);
             } else {
-                home.WifiP2PEnabled(false);
+//                backgroundServiceUpdate.WifiP2PEnabled(false);
             }
 
         } //checks for changed peers in the list
@@ -61,7 +61,7 @@ public class P2PBroadcastReceiver extends BroadcastReceiver {
             //fetch list -- https://developer.android.com/training/connect-devices-wirelessly/wifi-direct.html#fetch
             //finding the peers
             if (manager != null) {
-                manager.requestPeers(channel, home);
+                manager.requestPeers(channel, powerButtonActivation);
             }
 
         }//checks for connections
@@ -76,7 +76,7 @@ public class P2PBroadcastReceiver extends BroadcastReceiver {
 
             if (networkInfo.isConnected()) {
 
-                manager.requestConnectionInfo(channel, home);
+                manager.requestConnectionInfo(channel, powerButtonActivation);
             }
 
         }//checks for wifi state change
