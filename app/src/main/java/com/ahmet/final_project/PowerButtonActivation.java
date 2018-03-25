@@ -84,6 +84,8 @@ public class PowerButtonActivation extends BroadcastReceiver implements WifiP2pM
     Channel channel;
 
     Context mContext;
+    public static String deviceName = "";
+    public static String gOIP = "";
 
     @Override
     public void onReceive(final Context context, Intent intent) {
@@ -209,6 +211,11 @@ public class PowerButtonActivation extends BroadcastReceiver implements WifiP2pM
         //location manager helps to get current location
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
+        //check these out for service discovery so it can discover peers in the background all the time
+        //https://stackoverflow.com/questions/26300889/wifi-p2p-service-discovery-works-intermittently
+//        https://stackoverflow.com/questions/29734632/wi-fi-p2p-inform-all-peers-available-of-some-event/29769877#29769877
+//        https://developer.android.com/training/connect-devices-wirelessly/nsd-wifi-direct.html
+        //https://stackoverflow.com/questions/48248292/alternative-to-discovering-peers-with-wifi-direct-as-it-requires-both-phones-run
         if (notificationClicked != null) {
 //            db.OnOPen();
 //            //get location
@@ -425,13 +432,16 @@ public class PowerButtonActivation extends BroadcastReceiver implements WifiP2pM
             wifiP2pDevice = (WifiP2pDevice) peersList.get(i);
 //            String deviceName=wifiP2pDevice.deviceName;
 //            int devicestatus=wifiP2pDevice.status;
+
+
+            //setup the connection and obtain peer
+            WifiP2pConfig wifiP2pConfig = new WifiP2pConfig();
+            wifiP2pConfig.deviceAddress = wifiP2pDevice.deviceAddress;
+            wifiP2pConfig.wps.setup = WpsInfo.PBC;
+            //peer to be client
+//            wifiP2pConfig.groupOwnerIntent = 15;
+
         }
-
-
-        //setup the connection
-        WifiP2pConfig wifiP2pConfig = new WifiP2pConfig();
-        wifiP2pConfig.deviceAddress = wifiP2pDevice.deviceAddress;
-        wifiP2pConfig.wps.setup = WpsInfo.PBC;
         //connect to the peer
         Connect();
         if (peersList.size() == 0) {
@@ -450,14 +460,14 @@ public class PowerButtonActivation extends BroadcastReceiver implements WifiP2pM
             @Override
             public void onSuccess() {
 //                System.out.println("Connection established");
-                home.Notification(mContext, notificationChannel, R.drawable.ic_tick, Color.RED, "Success", "Connection Established");
+//                home.Notification(mContext, notificationChannel, R.drawable.ic_tick, Color.RED, "Success", "Connection Established");
 
             }
 
             @Override
             public void onFailure(int reason) {
 //                System.out.println("Connection failed " + reason);
-                home.Notification(mContext, notificationChannel, R.drawable.ic_tick, Color.RED, "Error", "Connection failed: " + reason);
+//                home.Notification(mContext, notificationChannel, R.drawable.ic_tick, Color.RED, "Error", "Connection failed: " + reason);
 
             }
         });
@@ -470,14 +480,21 @@ public class PowerButtonActivation extends BroadcastReceiver implements WifiP2pM
 
         WifiP2pDevice device = this.wifiP2pDevice;
 
+//        setDeviceName(device.deviceName.toString());
+//        setgOIP(wifiP2pInfo.groupOwnerAddress.getHostAddress().toString());
+
+//        home.Notification(mContext, notificationChannel, R.drawable.ic_tick, Color.RED, "Success", "Peer device name: " + device.deviceName +
+//                    ", Group Owner IP: " + wifiP2pInfo.groupOwnerAddress.getHostAddress().toString());
+
+        home.Notification(mContext, notificationChannel, R.drawable.ic_tick, Color.RED, "SOS", "HELP!");
+
         //when the connection is successful a group will be formed with no password request
-        //the group owner will be the one who started discovery and be abe to send message
+        //the group owner will be the one who started discovery and be able to send message
         if (wifiP2pInfo.groupFormed && wifiP2pInfo.isGroupOwner) {
             //Shows the connected device and shows the group owner ip address in notification
 
 //            System.out.println("Peer device name: " + device.deviceName + ", Group Owner IP: " + wifiP2pInfo.groupOwnerAddress.getHostAddress().toString());
-            home.Notification(mContext, notificationChannel, R.drawable.ic_tick, Color.RED, "Success", "Peer device name: " + device.deviceName +
-                    ", Group Owner IP: " + wifiP2pInfo.groupOwnerAddress.getHostAddress().toString());
+//            home.Notification(mContext, notificationChannel, R.drawable.ic_tick, Color.RED, "SOS", "HELP!");
 
 
             //the other device will be the client in this case and receive the message
@@ -485,8 +502,10 @@ public class PowerButtonActivation extends BroadcastReceiver implements WifiP2pM
             //Shows the connected device and shows the group owner ip address in notification
 
 //            System.out.println("Peer device name: " + device.deviceName + ", Group Owner IP: " + wifiP2pInfo.groupOwnerAddress.getHostAddress().toString());
-            home.Notification(mContext, notificationChannel, R.drawable.ic_tick, Color.RED, "Success", "Peer device name: " + device.deviceName +
-                    ", Group Owner IP: " + wifiP2pInfo.groupOwnerAddress.getHostAddress().toString());
+//            home.Notification(mContext, notificationChannel, R.drawable.ic_tick, Color.RED, "Success", "Peer device name: " + device.deviceName +
+//                    ", Group Owner IP: " + wifiP2pInfo.groupOwnerAddress.getHostAddress().toString());
+//            home.Notification(mContext, notificationChannel, R.drawable.ic_tick, Color.RED, "SOS", "HELP!");
+
         }
 
 //        final Button disconnect = (Button) findViewById(R.id.disconnectButton);
@@ -516,6 +535,22 @@ public class PowerButtonActivation extends BroadcastReceiver implements WifiP2pM
 //                });
 //            }
 //        });
+    }
+
+    public String getDeviceName() {
+        return this.deviceName;
+    }
+
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
+    }
+
+    public String getgOIP() {
+        return this.gOIP;
+    }
+
+    public void setgOIP(String gOIP) {
+        this.gOIP = gOIP;
     }
 
 

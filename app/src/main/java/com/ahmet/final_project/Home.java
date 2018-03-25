@@ -94,6 +94,7 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback/* Wifi
     String finalLocation = null;
     int countTimer = 0;
     private GoogleMap mMap;
+    LatLng currentLocation = null;
 
     //notification builder parameters
     int channelIdSendMessage = 1;
@@ -629,12 +630,12 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback/* Wifi
 //        });
 //    }
 
+    //check it out for getting location if no internet
     //showing google map
     @Override
     public void onMapReady(GoogleMap googleMap) {
         //check it out -- https://developers.google.com/maps/documentation/android-api/map
         mMap = googleMap;
-
         //get refresh location
         final int loc_refresh = (Integer.parseInt(db.getLocation_Refresh().toString()) * 1000) * 60;
 
@@ -653,7 +654,7 @@ public class Home extends AppCompatActivity implements OnMapReadyCallback/* Wifi
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
                 //use lat long to define the location
-                LatLng currentLocation = new LatLng(latitude, longitude);
+                currentLocation = new LatLng(latitude, longitude);
                 //add a marker of the gathered location
                 mMap.addMarker(new MarkerOptions().position(currentLocation).title("Current location"));
                 //moves the screen towards the marker with a zoom level of 15 showing streets

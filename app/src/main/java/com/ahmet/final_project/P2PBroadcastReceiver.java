@@ -4,6 +4,7 @@ package com.ahmet.final_project;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -17,6 +18,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class P2PBroadcastReceiver extends BroadcastReceiver {
 
@@ -24,6 +27,9 @@ public class P2PBroadcastReceiver extends BroadcastReceiver {
     private WifiP2pManager manager;
     private Channel channel;
     private PowerButtonActivation powerButtonActivation;
+    Home home;
+    String deviceName = "";
+    String gOIP = "";
 
     private WifiP2pManager.PeerListListener peerListListener;
 
@@ -40,7 +46,8 @@ public class P2PBroadcastReceiver extends BroadcastReceiver {
     }
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(final Context context, Intent intent) {
+        home = new Home();
 
         //https://developer.android.com/training/connect-devices-wirelessly/wifi-direct.html
         String action = intent.getAction();
@@ -66,6 +73,8 @@ public class P2PBroadcastReceiver extends BroadcastReceiver {
 
         }//checks for connections
         else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
+            deviceName = powerButtonActivation.getDeviceName();
+            gOIP = powerButtonActivation.getgOIP();
 
             if (manager == null) {
                 return;
@@ -77,6 +86,19 @@ public class P2PBroadcastReceiver extends BroadcastReceiver {
             if (networkInfo.isConnected()) {
 
                 manager.requestConnectionInfo(channel, powerButtonActivation);
+//                new Timer().schedule(new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        home.Notification(context, 2, R.drawable.ic_tick, Color.RED, "SOS Message", /*"Peer device name: " +*/ deviceName +
+//                        /*", Group Owner IP: "*/ ", " + gOIP);
+//                    }
+//                }, 5000);
+
+
+            } else {
+//                //disconnection
+//                home.Notification(context, 2, R.drawable.ic_tick, Color.RED, "Disconnected", "Peer device name: " + deviceName +
+//                        ", Group Owner IP: " + gOIP);
             }
 
         }//checks for wifi state change
