@@ -1,5 +1,5 @@
 # SOS Contacts
----------------------
+
 This is an Android application that allows users to send an SOS message via SMS automatically by clicking on a notification or button on the home screen.
 Firstly, there is a setup that user needs to go through and once this is completed, the application can be used. 
 
