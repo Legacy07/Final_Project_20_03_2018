@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Final Year Project</string>
+    <string name="app_name">SOS Contact</string>
     <string name="bullet_point_1"><b> \u2022 Send Emergency messages automatically to your family/friends and the emergency centre by multiple presses on power button </b></string>
     <string name="bullet_point_2"><b> \u2022 Able to send messages automatically even if there is no signal on your device </b></string>
 
